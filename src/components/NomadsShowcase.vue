@@ -2,10 +2,10 @@
   <section class="nomads-showcase-section">
     <div class="showcase-header">
       <div class="header-left">
-        <h2 class="showcase-title">实战案例与精译模板库 (Nomads Showcase)</h2>
-        <p class="showcase-subtitle">精选多语种高频场景，点击“一键套用”快速获取地道翻译与润色</p>
+        <h2 class="showcase-title">实战案例与模板库 (Nomads Showcase)</h2>
+        <p class="showcase-subtitle">精选高频实战场景，点击“一键套用”快速生成高质量结果</p>
       </div>
-      <span class="showcase-badge">已收录 {{ showcaseItems.length }} 个跨语言翻译模板</span>
+      <span class="showcase-badge">已收录 {{ showcaseItems.length }} 个实战模板</span>
     </div>
 
     <div class="showcase-grid">
@@ -41,95 +41,119 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 
+const props = defineProps<{
+  appTitle?: string;
+  isImage?: boolean;
+}>();
+
+const emit = defineEmits<{
+  (e: 'apply-template', payload: { prompt: string; style?: string }): void;
+}>();
+
 export interface ShowcaseItem {
   id: string;
   tag: string;
   title: string;
   prompt: string;
-  translationType?: string;
-  targetLang?: string;
-  toneStyle?: string;
+  style?: string;
   usageCount: string;
 }
 
-const emit = defineEmits<{
-  (e: 'apply-template', payload: {
-    prompt: string;
-    translationType?: string;
-    targetLang?: string;
-    toneStyle?: string;
-  }): void;
-}>();
-
-const showcaseItems = computed<ShowcaseItem[]>(() => [
-  {
-    id: 'fanyi-1',
-    tag: '学术润色',
-    title: 'SCI 论文摘要顶级学术表达润色',
-    prompt: '针对人工智能领域 SCI 论文 Abstract，提升学术用词精准度，替换平淡口语化词汇为高端学术动词，优化被动语态与复合句型。',
-    translationType: '学术论文与期刊地道润色',
-    targetLang: '英语English',
-    toneStyle: '专业严谨学术风',
-    usageCount: '45.2k'
-  },
-  {
-    id: 'fanyi-2',
-    tag: '商务外贸',
-    title: '外贸客户询盘与价格谈判邮件',
-    prompt: '针对欧洲客户关于产品定制化报价与交货期的询盘，撰写礼貌得体、条理清晰且富有专业商务谈判技巧的回复邮件。',
-    translationType: '商务邮件与外贸合同翻译',
-    targetLang: '英语English',
-    toneStyle: '正式商务公文风',
-    usageCount: '39.8k'
-  },
-  {
-    id: 'fanyi-3',
-    tag: '软件本地化',
-    title: 'SaaS 软件核心界面与错误提示本地化',
-    prompt: '将云端协同软件的登录、配置、权限管理与异常提示语翻译为地道日文，确保简短精练且完全符合日本用户 UI 使用习惯。',
-    translationType: '软件本地化与多语种互译',
-    targetLang: '日语Japanese',
-    toneStyle: '自然流畅口语风',
-    usageCount: '31.4k'
-  },
-  {
-    id: 'fanyi-4',
-    tag: '法律合同',
-    title: '跨国保密协议与补充条款严谨翻译',
-    prompt: '将中英文 NDA 保密协议及补充违约赔偿条款精准翻译为德语，确保法律术语严谨且无歧义。',
-    translationType: '商务邮件与外贸合同翻译',
-    targetLang: '德语German',
-    toneStyle: '专业严谨学术风',
-    usageCount: '28.6k'
-  },
-  {
-    id: 'fanyi-5',
-    tag: '品牌意译',
-    title: '企业品牌口号与文化故事意译润色',
-    prompt: '将企业东方美学品牌的宣传语与品牌故事意译为优雅法语，保留诗意韵味并符合欧洲文化审美习惯。',
-    translationType: '文学作品与口语地道意译',
-    targetLang: '法语French',
-    toneStyle: '优雅文学意译风',
-    usageCount: '25.7k'
-  },
-  {
-    id: 'fanyi-6',
-    tag: '跨境说明书',
-    title: '智能家电西语产品使用说明与 FAQ',
-    prompt: '针对拉丁美洲西语市场，翻译智能扫地机的产品功能说明、常见故障排查与安全警告事项。',
-    translationType: '软件本地化与多语种互译',
-    targetLang: '西班牙语Spanish',
-    toneStyle: '正式商务公文风',
-    usageCount: '22.1k'
+// 模拟实战案例数据库（支持根据文本/图像类及应用主题切换）
+const showcaseItems = computed<ShowcaseItem[]>(() => {
+  if (props.isImage) {
+    return [
+      {
+        id: 'img-1',
+        tag: '写真肖像',
+        title: '商务精英形象照',
+        prompt: '高端写字楼背景，身穿深蓝色西装，眼神自信专注，赛博朋克光影效果',
+        style: '<photography>',
+        usageCount: '18.5k'
+      },
+      {
+        id: 'img-2',
+        tag: '概念插画',
+        title: '未来科幻城市海报',
+        prompt: '霓虹灯光的赛博朋克立体城市，飞行汽车，高品质概念插画，8k分辨率',
+        style: '<illustration>',
+        usageCount: '24.1k'
+      },
+      {
+        id: 'img-3',
+        tag: '二次元动漫',
+        title: '日系国潮动漫角色',
+        prompt: '穿着现代汉服的国风少年，手持纸伞，水彩漫感，唯美光感与柔光滤镜',
+        style: '<anime>',
+        usageCount: '15.9k'
+      },
+      {
+        id: 'img-4',
+        tag: '水彩艺术',
+        title: '治愈系自然风景画',
+        prompt: '晨雾中的森林湖泊，阳光穿透树林，水彩渐变质感，温馨治愈风格',
+        style: '<watercolor>',
+        usageCount: '12.3k'
+      }
+    ];
+  } else {
+    return [
+      {
+        id: 'text-1',
+        tag: '职场总结',
+        title: '周报 OKR 成果提炼',
+        prompt: '本周完成了核心模块优化与线上异常排查，请帮我梳理为具备量化指标的 OKR 汇报文案',
+        style: '专业干练，结果导向',
+        usageCount: '32.8k'
+      },
+      {
+        id: 'text-2',
+        tag: '高情商沟通',
+        title: '拒绝不合理加班话术',
+        prompt: '领导在周末突然布置非紧急任务，如何高情商、委婉且有理有据地推迟到工作日处理？',
+        style: '高情商，委婉，有情调',
+        usageCount: '28.4k'
+      },
+      {
+        id: 'text-3',
+        tag: '短视频文案',
+        title: '知识干货吸睛开头',
+        prompt: '准备制作一条关于高效学习法的短视频，设计 3 个能在前 3 秒留住用户的爆款口播开头',
+        style: '专业干练，结果导向',
+        usageCount: '45.1k'
+      },
+      {
+        id: 'text-4',
+        tag: '商务公文',
+        title: '跨部门协同申请函',
+        prompt: '因项目上线需要研发部门配合联调，撰写一份正式、严谨且明确时间节点的协同申请书',
+        style: '专业干练，结果导向',
+        usageCount: '19.7k'
+      },
+      {
+        id: 'text-5',
+        tag: '小红书种草',
+        title: '实战干货笔记排版',
+        prompt: '分享 5 个提升日常工作效率的文字工具，语言亲切，搭配吸引人的标题与 Emoji 排版',
+        style: '高情商，委婉，有情调',
+        usageCount: '36.2k'
+      },
+      {
+        id: 'text-6',
+        tag: '学术润色',
+        title: '论文摘要与结论重构',
+        prompt: '将以下粗糙的研究结论重写为学术规范、逻辑严密且无语法语病的论文摘要总结',
+        style: '专业干练，结果导向',
+        usageCount: '22.0k'
+      }
+    ];
   }
-]);
+});
 
 function applyTemplate(item: ShowcaseItem) {
   emit('apply-template', {
     prompt: item.prompt,
-    translationType: item.translationType,
-    targetLang: item.targetLang,
-    toneStyle: item.toneStyle
+    style: item.style
   });
 }
 </script>
